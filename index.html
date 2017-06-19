@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dashboard Assignment</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body >
+<!--updated to vue 2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.js"></script>
+<script src="https://unpkg.com/chartkick@2.2.3"></script>
+<script src="https://unpkg.com/vue-chartkick@0.2.0/dist/vue-chartkick.min.js"></script>
+<script src="https://unpkg.com/chart.js@2.5.0/dist/Chart.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.3/papaparse.min.js"></script>
+<h1 style="text-align: center;" > SocialCops IPL Dashboard</h1>
+<div id="app" style="margin-left: 500px;">
+	<h3 >1. Result: normal/tie/no-result</h3>
+  	<pie-chart :data="winsPerTeam" width="400px" height="300px"  ></pie-chart>
+<br><br>
+</div>
+<div id="app1" >
+	<h3 style="text-align: center;">2. Superover-> 1 and No super over-> 0</h3>
+  	<bar-chart :data="winsPerTeam" width="1200px" height="200px"></bar-chart>
+<br><br>
+</div>
+<div id="app2" >
+	<h3 style="text-align: center;">3. Favourite city</h3>
+  	<column-chart :data="winsPerTeam" colors="['#b00', '#666']"></column-chart>
+<br><br>
+</div>
+
+
+	<script>
+
+
+	  var app = new Vue({
+	    el: "#app",
+	    data: {
+
+	      winsPerTeam: [], 
+	    },
+			mounted: function () {
+				var self = this;
+				Papa.parse("./matches.csv", {
+					download: true,
+					header: true,
+					complete: function(results) {
+						var teams = {};
+						console.log(results.data);
+						for (var i = 0; i < results.data.length; i++) {
+							var winner = results.data[i]['result'];
+							if (winner in teams) {
+								teams[winner] += 1;
+							}
+							else {
+								teams[winner] = 1;
+							}
+						}
+						console.log(teams);
+						var ret = [];
+						for(var i in teams) {
+							ret.push([i, teams[i]]);
+						}
+
+						self.winsPerTeam = ret;
+						console.log("Finished:", ret);
+					}
+				});
+			}
+	  })
+
+
+	</script>
+
+
+	<script >
+		
+		var app = new Vue({
+	    el: "#app1",
+	    data: {
+
+	      winsPerTeam: [], 
+	    },
+			mounted: function () {
+				var self = this;
+				Papa.parse("./deliveries.csv", {
+					download: true,
+					header: true,
+					complete: function(results) {
+						var teams = {};
+						console.log(results.data);
+						for (var i = 0; i < results.data.length; i++) {
+							var winner = results.data[i]['is_super_over'];
+							if (winner in teams) {
+								teams[winner] += 1;
+							}
+							else {
+								teams[winner] = 1;
+							}
+						}
+						console.log(teams);
+						var ret = [];
+						for(var i in teams) {
+							ret.push([i, teams[i]]);
+						}
+
+						self.winsPerTeam = ret;
+						console.log("Finished:", ret);
+					}
+				});
+			}
+	  })
+	</script>
+
+
+		<script >
+		
+		var app = new Vue({
+	    el: "#app2",
+	    data: {
+
+	      winsPerTeam: [], 
+	    },
+			mounted: function () {
+				var self = this;
+				Papa.parse("./matches.csv", {
+					download: true,
+					header: true,
+					complete: function(results) {
+						var teams = {};
+						console.log(results.data);
+						for (var i = 0; i < results.data.length; i++) {
+							var winner = results.data[i]['city'];
+							if (winner in teams) {
+								teams[winner] += 1;
+							}
+							else {
+								teams[winner] = 1;
+							}
+						}
+						console.log(teams);
+						var ret = [];
+						for(var i in teams) {
+							ret.push([i, teams[i]]);
+						}
+
+						self.winsPerTeam = ret;
+						console.log("Finished:", ret);
+					}
+				});
+			}
+	  })
+	</script>
+
+</body>
+</html>
