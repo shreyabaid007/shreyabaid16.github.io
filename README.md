@@ -7,7 +7,6 @@
 -->Bonus Points: vue.js, responsive
 
 --> 1. 'vue-chartkick' which creates beautiful charts with one line in Vue.js
-
     2. 'papaparse' converts csv files to json
     
 -->Live Demo: shreyabaid16.github.io
