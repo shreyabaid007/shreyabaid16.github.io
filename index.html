@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Dashboard Assignment</title>
+	<title>Dashboard</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 </head>
@@ -13,27 +13,29 @@
 <script src="https://unpkg.com/vue-chartkick@0.2.0/dist/vue-chartkick.min.js"></script>
 <script src="https://unpkg.com/chart.js@2.5.0/dist/Chart.bundle.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.3.3/papaparse.min.js"></script>
-<h1 style="text-align: center;" > SocialCops IPL Dashboard</h1>
-<div id="app" style="margin-left: 500px;">
-	<h3 >1. Result: normal/tie/no-result</h3>
-  	<pie-chart :data="winsPerTeam" width="400px" height="300px"  ></pie-chart>
+
+<h1 style="text-align: center;" >  IPL Dashboard</h1>
+
+<div id="app">
+	<h3 style="text-align: center;">1. No. of wins </h3>
+  	<pie-chart :donut="true" :data="winsPerTeam" ></pie-chart>
 <br><br>
 </div>
+
 <div id="app1" >
-	<h3 style="text-align: center;">2. Superover-> 1 and No super over-> 0</h3>
-  	<bar-chart :data="winsPerTeam" width="1200px" height="200px"></bar-chart>
+	<h3 style="text-align: center;">2. Toss Decision</h3>
+  	<pie-chart :data="winsPerTeam"></pie-chart>
 <br><br>
 </div>
+
 <div id="app2" >
-	<h3 style="text-align: center;">3. Favourite city</h3>
-  	<column-chart :data="winsPerTeam" colors="['#b00', '#666']"></column-chart>
+	<h3 style="text-align: center;">3. Toss winner is real winner</h3>
+  	<column-chart :data="winsPerTeam"></column-chart>
 <br><br>
 </div>
 
 
 	<script>
-
-
 	  var app = new Vue({
 	    el: "#app",
 	    data: {
@@ -49,7 +51,7 @@
 						var teams = {};
 						console.log(results.data);
 						for (var i = 0; i < results.data.length; i++) {
-							var winner = results.data[i]['result'];
+							var winner = results.data[i]['toss_winner'];
 							if (winner in teams) {
 								teams[winner] += 1;
 							}
@@ -73,7 +75,6 @@
 
 	</script>
 
-
 	<script >
 		
 		var app = new Vue({
@@ -84,14 +85,14 @@
 	    },
 			mounted: function () {
 				var self = this;
-				Papa.parse("./deliveries.csv", {
+				Papa.parse("./matches.csv", {
 					download: true,
 					header: true,
 					complete: function(results) {
 						var teams = {};
 						console.log(results.data);
 						for (var i = 0; i < results.data.length; i++) {
-							var winner = results.data[i]['is_super_over'];
+							var winner = results.data[i]['toss_decision'];
 							if (winner in teams) {
 								teams[winner] += 1;
 							}
@@ -131,9 +132,10 @@
 						var teams = {};
 						console.log(results.data);
 						for (var i = 0; i < results.data.length; i++) {
-							var winner = results.data[i]['city'];
+							var winner = results.data[i]['toss_winner'];
 							if (winner in teams) {
-								teams[winner] += 1;
+								if(winner==results.data[i]['winner'])
+									teams[winner] += 1;
 							}
 							else {
 								teams[winner] = 1;
